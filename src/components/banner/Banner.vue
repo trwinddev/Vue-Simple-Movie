@@ -1,40 +1,28 @@
 <template>
-  <div class="movie-list">
-    <swiper :grab-cursor="true" :slides-per-view="4" :space-between="40">
+  <section class="banner h-[500px] page-container mb-10 overflow-hidden">
+    <swiper :grab-cursor="true" slides-per-view="auto">
       <swiper-slide v-for="(movie, index) in movies" :key="index">
-        <movie-card :movie="movie"></movie-card>
+        <banner-item :movie="movie"></banner-item>
       </swiper-slide>
     </swiper>
-  </div>
+  </section>
 </template>
 
 <script>
+import BannerItem from './BannerItem.vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import MovieCard from './MovieCard.vue'
 import 'swiper/scss'
 import { ref } from 'vue'
+
 export default {
-  components: { MovieCard, Swiper, SwiperSlide },
-  props: {
-    type: {
-      type: String,
-      required: true
-    }
-  },
-  setup(props) {
+  components: { BannerItem, Swiper, SwiperSlide },
+  setup() {
     const movies = ref([])
     const headUrl = 'https://api.themoviedb.org/3/movie'
     const API_KEY = '1e736f7376d8b7f90a66c1431257159b'
     const fetchMovies = async () => {
       try {
-        let apiUrl = ''
-        if (props.type === 'now_playing') {
-          apiUrl = `${headUrl}/now_playing?api_key=${API_KEY}`
-        } else if (props.type === 'popular') {
-          apiUrl = `${headUrl}/popular?api_key=${API_KEY}`
-        } else if (props.type === 'top_rated') {
-          apiUrl = `${headUrl}/top_rated?api_key=${API_KEY}`
-        }
+        const apiUrl = `${headUrl}/upcoming?api_key=${API_KEY}`
         const response = await fetch(apiUrl)
         const data = await response.json()
         movies.value = data.results
