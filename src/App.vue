@@ -1,11 +1,11 @@
 <template>
   <div>
-    <header class="header text-white flex justify-center items-center gap-x-5 py-10 mb-10">
+    <header class="header text-white flex justify-center items-center gap-x-5 py-10 mb-5">
       <router-link :to="{ name: 'home' }" class="text-primary">Home</router-link>
       <router-link :to="{ name: 'movies' }">Movies</router-link>
       <router-view></router-view>
     </header>
-    <section class="banner h-[400px] page-container">
+    <section class="banner h-[500px] page-container mb-10">
       <div class="w-full h-full relative rounded-lg">
         <div
           class="overlay absolute inset-0 bg-gradient-to-t from-[rgba(0,0,0,0.5)] to-[rgba(0,0,0,0.5)] rounded-lg"
@@ -26,5 +26,31 @@
         </div>
       </div>
     </section>
+    <section class="movies-layout page-container pb-20">
+      <h2 class="capitalize text-white mb-5 text-3xl font-bold">Now playing</h2>
+      <div class="movie-list grid grid-cols-4 gap-10">
+        <movie-card></movie-card>
+      </div>
+    </section>
+    <section class="movies-layout page-container pb-20">
+      <h2 class="capitalize text-white mb-5 text-3xl font-bold">Top rated</h2>
+      <div class="movie-list grid grid-cols-4 gap-10">
+        <movie-card></movie-card>
+      </div>
+    </section>
+    <section class="movies-layout page-container pb-20">
+      <h2 class="capitalize text-white mb-5 text-3xl font-bold">Trending</h2>
+      <div class="movie-list grid grid-cols-4 gap-10">
+        <movie-card></movie-card>
+      </div>
+    </section>
   </div>
 </template>
+
+<script>
+import MovieCard from './components/movie/MovieCard.vue'
+export default {
+  components: { MovieCard },
+  setup() {}
+}
+</script>
