@@ -28,29 +28,29 @@
     </section>
     <section class="movies-layout page-container pb-20">
       <h2 class="capitalize text-white mb-5 text-3xl font-bold">Now playing</h2>
-      <div class="movie-list grid grid-cols-4 gap-10">
-        <movie-card></movie-card>
-      </div>
+      <movie-list type="now_playing"></movie-list>
+    </section>
+    <section class="movies-layout page-container pb-20">
+      <h2 class="capitalize text-white mb-5 text-3xl font-bold">Popular</h2>
+      <movie-list type="popular"></movie-list>
     </section>
     <section class="movies-layout page-container pb-20">
       <h2 class="capitalize text-white mb-5 text-3xl font-bold">Top rated</h2>
-      <div class="movie-list grid grid-cols-4 gap-10">
-        <movie-card></movie-card>
-      </div>
+      <movie-list type="top_rated"></movie-list>
     </section>
     <section class="movies-layout page-container pb-20">
-      <h2 class="capitalize text-white mb-5 text-3xl font-bold">Trending</h2>
-      <div class="movie-list grid grid-cols-4 gap-10">
-        <movie-card></movie-card>
-      </div>
+      <h2 class="capitalize text-white mb-5 text-3xl font-bold">Upcoming</h2>
+      <movie-list type="up_coming"></movie-list>
     </section>
   </div>
 </template>
 
 <script>
-import MovieCard from './components/movie/MovieCard.vue'
+import MovieList from './components/movie/MovieList.vue'
 export default {
-  components: { MovieCard },
+  components: { MovieList },
   setup() {}
 }
 </script>
+
+<style scoped></style>

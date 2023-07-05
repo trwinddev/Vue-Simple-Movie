@@ -1,19 +1,43 @@
 <template>
-  <div class="movie-card rounded-lg p-3 bg-slate-800 text-white">
+  <div
+    className="h-full movie-card flex flex-col rounded-lg p-3 bg-slate-800 select-none text-white "
+  >
     <img
-      src="https://genk.mediacdn.vn/2019/8/20/1-15662898065871774855253.jpg"
+      :src="getMoviePosterUrl()"
       alt=""
-      class="w-full h-[250px] object-cover rounded-lg mb-5"
+      className="w-full h-auto
+    object-cover rounded-lg mb-5"
     />
-    <h3 class="text-xl font-bold mb-3">Spiderman: Home Coming</h3>
-    <div class="flex items-center justify-between text-sm opacity-50 mb-10">
-      <span>2017</span>
-      <span>7.4</span>
+    <div class="flex flex-col flex-1">
+      <h3 className="font-bold text-xl mb-3">{{ movie.title }}</h3>
+      <div className="flex items-center justify-between text-sm opacity-50 mb-10">
+        <span>{{ getYear() }}</span>
+        <span>{{ movie.vote_average }}</span>
+      </div>
+      <button className="mt-auto py-3 px-6 rounded-lg capitalize bg-primary w-full">
+        Watch now
+      </button>
     </div>
-    <button class="py-3 capitalize px-6 rounded-lg w-full bg-primary">Watch now</button>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  props: ['movie'],
+  methods: {
+    getMoviePosterUrl() {
+      if (this.movie.poster_path) {
+        return `https://image.tmdb.org/t/p/w500/${this.movie.poster_path}`
+      }
+      return ''
+    },
+    getYear() {
+      if (this.movie.release_date) {
+        const releaseYear = new Date(this.movie.release_date).getFullYear()
+        return releaseYear
+      }
+      return ''
+    }
+  }
+}
 </script>
