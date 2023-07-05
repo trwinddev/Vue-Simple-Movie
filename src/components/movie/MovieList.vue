@@ -23,21 +23,19 @@ export default {
   },
   setup(props) {
     const movies = ref([])
+    const headUrl = 'https://api.themoviedb.org/3/movie'
+    const API_KEY = '1e736f7376d8b7f90a66c1431257159b'
     const fetchMovies = async () => {
       try {
         let apiUrl = ''
         if (props.type === 'now_playing') {
-          apiUrl =
-            'https://api.themoviedb.org/3/movie/now_playing?api_key=1e736f7376d8b7f90a66c1431257159b'
+          apiUrl = `${headUrl}/now_playing?api_key=${API_KEY}`
         } else if (props.type === 'popular') {
-          apiUrl =
-            'https://api.themoviedb.org/3/movie/popular?api_key=1e736f7376d8b7f90a66c1431257159b'
+          apiUrl = `${headUrl}/popular?api_key=${API_KEY}`
         } else if (props.type === 'top_rated') {
-          apiUrl =
-            'https://api.themoviedb.org/3/movie/top_rated?api_key=1e736f7376d8b7f90a66c1431257159b'
+          apiUrl = `${headUrl}/top_rated?api_key=${API_KEY}`
         } else if (props.type === 'up_coming') {
-          apiUrl =
-            'https://api.themoviedb.org/3/movie/upcoming?api_key=1e736f7376d8b7f90a66c1431257159b'
+          apiUrl = `${headUrl}/upcoming?api_key=${API_KEY}`
         }
         const response = await fetch(apiUrl)
         const data = await response.json()
