@@ -13,9 +13,9 @@ export const fetchPopularMovies = async () => {
   }
 }
 
-export const fetchNowPlayingMovies = async () => {
+export const fetchNowPlayingMovies = async (page) => {
   try {
-    const apiUrl = `${headUrl}/now_playing?api_key=${API_KEY}`
+    const apiUrl = `${headUrl}/now_playing?api_key=${API_KEY}&page=${page}`
     const response = await fetch(apiUrl)
     const data = await response.json()
     return data.results
@@ -97,10 +97,22 @@ export const fetchMovieSimilar = async (movieId) => {
   }
 }
 
-export const searchMovie = async (query) => {
+export const searchMovie = async (query, page) => {
   try {
     const encodedQuery = encodeURIComponent(query)
-    const apiUrl = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodedQuery}`
+    const apiUrl = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodedQuery}&page=${page}`
+    const response = await fetch(apiUrl)
+    const data = await response.json()
+    return data.results
+  } catch (error) {
+    console.log(error)
+    return []
+  }
+}
+
+export const nextListMovie = async (page) => {
+  try {
+    const apiUrl = `https://api.themoviedb.org/3/movie/now_playing?api_key=${API_KEY}&page=${page}`
     const response = await fetch(apiUrl)
     const data = await response.json()
     return data.results

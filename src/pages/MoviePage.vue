@@ -27,10 +27,18 @@
         </svg>
       </button>
     </div>
-    <div class="movie-list grid grid-cols-4 gap-10 pb-20">
+    <div class="movie-list grid grid-cols-4 gap-10 pb-10">
       <div v-for="(movie, index) in movies" :key="index">
         <movie-card :movie="movie"></movie-card>
       </div>
+    </div>
+    <div class="pb-20 flex justify-center">
+      <button
+        class="bg-slate-600 font-medium text-white rounded-md py-3 px-5"
+        @click="loadNextPage"
+      >
+        Load more...
+      </button>
     </div>
   </div>
 </template>
@@ -38,22 +46,40 @@
 <script>
 import { ref } from 'vue'
 import MovieCard from '../components/movie/MovieCard.vue'
-import { fetchNowPlayingMovies, searchMovie } from '../config/api'
+import { fetchNowPlayingMovies, searchMovie, nextListMovie } from '../config/api'
 
 export default {
   components: { MovieCard },
   setup() {
     const movies = ref([])
     const searchQuery = ref('')
+    const page = ref(1)
+    const nextPageAvailable = ref(false)
 
     const fetchMoviesData = async () => {
       movies.value = await fetchNowPlayingMovies()
+      nextPageAvailable.value = true
     }
+
     const searchMovies = async () => {
       if (searchQuery.value.trim() !== '') {
         movies.value = await searchMovie(searchQuery.value)
+        nextPageAvailable.value = false
       } else {
         fetchMoviesData()
+      }
+    }
+
+    const loadNextPage = async () => {
+      page.value++
+      if (searchQuery.value.trim() !== '') {
+        const additionalMovies = await searchMovie(searchQuery.value, page.value)
+        movies.value = [...movies.value, ...additionalMovies]
+        nextPageAvailable.value = additionalMovies.length > 0
+      } else {
+        const additionalMovies = await nextListMovie(page.value)
+        movies.value = [...movies.value, ...additionalMovies]
+        nextPageAvailable.value = additionalMovies.length > 0
       }
     }
 
@@ -61,7 +87,9 @@ export default {
     return {
       movies,
       searchQuery,
-      searchMovies
+      searchMovies,
+      loadNextPage,
+      nextPageAvailable
     }
   }
 }

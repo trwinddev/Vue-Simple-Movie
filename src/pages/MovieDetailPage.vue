@@ -52,7 +52,7 @@
     </div>
     <div class="similar">
       <h2 class="text-white capitalize text-3xl mb-10">Similar movie</h2>
-      <div class="movie-list grid grid-cols-4 gap-10">
+      <div class="movie-list grid grid-cols-4 gap-10 pb-10">
         <movie-card
           v-for="(movie, index) in similarMovies"
           :key="index"
