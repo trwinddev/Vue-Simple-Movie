@@ -10,6 +10,9 @@ module.exports = {
       colors: {
         primary: '#f62682',
         secondary: '#6f5cf1'
+      },
+      minHeight: {
+        '1/2': '50%'
       }
     }
   },
