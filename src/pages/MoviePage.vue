@@ -46,7 +46,7 @@
 <script>
 import { ref } from 'vue'
 import MovieCard from '../components/movie/MovieCard.vue'
-import { fetchNowPlayingMovies, searchMovie, nextListMovie } from '../config/api'
+import { fetchNowPlayingMovies, searchMovie } from '../config/api'
 
 export default {
   components: { MovieCard },
@@ -63,7 +63,7 @@ export default {
 
     const searchMovies = async () => {
       if (searchQuery.value.trim() !== '') {
-        movies.value = await searchMovie(searchQuery.value)
+        movies.value = await searchMovie(searchQuery.value, page.value)
         nextPageAvailable.value = false
       } else {
         fetchMoviesData()
@@ -77,7 +77,7 @@ export default {
         movies.value = [...movies.value, ...additionalMovies]
         nextPageAvailable.value = additionalMovies.length > 0
       } else {
-        const additionalMovies = await nextListMovie(page.value)
+        const additionalMovies = await fetchNowPlayingMovies(page.value)
         movies.value = [...movies.value, ...additionalMovies]
         nextPageAvailable.value = additionalMovies.length > 0
       }
