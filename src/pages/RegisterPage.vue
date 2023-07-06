@@ -41,7 +41,7 @@
         </div>
         <p class="text-white text-opacity-30 text-center pb-1">
           Already have an account?
-          <router-link class="text-primary font-medium" to="/register">Log in</router-link>
+          <router-link class="text-primary font-medium" to="/login">Log in</router-link>
         </p>
       </div>
     </v-form>
