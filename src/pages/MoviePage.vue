@@ -25,7 +25,7 @@
         </svg>
       </button>
     </div>
-    <div class="grid grid-cols-4 gap-10">
+    <div class="movie-list grid grid-cols-4 gap-10">
       <div v-for="(movie, index) in movies" :key="index">
         <movie-card :movie="movie"></movie-card>
       </div>
@@ -34,32 +34,20 @@
 </template>
 
 <script>
-import 'swiper/scss'
 import { ref } from 'vue'
 import MovieCard from '../components/movie/MovieCard.vue'
+import { fetchNowPlayingMovies } from '../config/api'
+
 export default {
   components: { MovieCard },
-  // props: {
-  //   type: {
-  //     type: String,
-  //     required: true
-  //   }
-  // },
   setup() {
     const movies = ref([])
-    const headUrl = 'https://api.themoviedb.org/3/movie'
-    const API_KEY = '1e736f7376d8b7f90a66c1431257159b'
-    const fetchMovies = async () => {
-      try {
-        let apiUrl = `${headUrl}/popular?api_key=${API_KEY}`
-        const response = await fetch(apiUrl)
-        const data = await response.json()
-        movies.value = data.results
-      } catch (error) {
-        console.log(error)
-      }
+
+    const fetchMoviesData = async () => {
+      movies.value = await fetchNowPlayingMovies()
     }
-    fetchMovies()
+
+    fetchMoviesData()
 
     return {
       movies

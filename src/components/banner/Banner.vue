@@ -13,25 +13,16 @@ import BannerItem from './BannerItem.vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/scss'
 import { ref } from 'vue'
+import { fetchUpcomingMovies } from '../../config/api'
 
 export default {
   components: { BannerItem, Swiper, SwiperSlide },
   setup() {
     const movies = ref([])
-    const headUrl = 'https://api.themoviedb.org/3/movie'
-    const API_KEY = '1e736f7376d8b7f90a66c1431257159b'
-    const fetchMovies = async () => {
-      try {
-        const apiUrl = `${headUrl}/upcoming?api_key=${API_KEY}`
-        const response = await fetch(apiUrl)
-        const data = await response.json()
-        movies.value = data.results
-      } catch (error) {
-        console.log(error)
-      }
+    const fetchMoviesData = async () => {
+      movies.value = await fetchUpcomingMovies()
     }
-    fetchMovies()
-
+    fetchMoviesData()
     return {
       movies
     }

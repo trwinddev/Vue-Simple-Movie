@@ -1,22 +1,18 @@
 <template>
-  <div
-    className="h-full movie-card flex flex-col rounded-lg p-3 bg-slate-800 select-none text-white "
-  >
-    <img
-      :src="getMoviePosterUrl()"
-      alt=""
-      className="w-full h-auto
-    object-cover rounded-lg mb-5"
-    />
+  <div class="h-full movie-card flex flex-col rounded-lg p-3 bg-slate-800 select-none text-white">
+    <img :src="getMoviePosterUrl()" alt="" class="w-full h-auto object-cover rounded-lg mb-5" />
     <div class="flex flex-col flex-1">
-      <h3 className="font-bold text-xl mb-3">{{ movie.title }}</h3>
-      <div className="flex items-center justify-between text-sm opacity-50 mb-10">
+      <h3 class="font-bold text-xl mb-3">{{ movie.title }}</h3>
+      <div class="flex items-center justify-between text-sm opacity-50 mb-10">
         <span>{{ getYear() }}</span>
-        <span>{{ movie.vote_average }}</span>
+        <span>{{ movie.vote_average }}⭐</span>
       </div>
-      <button className="mt-auto py-3 px-6 rounded-lg capitalize bg-primary w-full">
-        Watch now
-      </button>
+      <router-link
+        :to="getMovieDetail(movie)"
+        class="mt-auto py-3 px-6 rounded-lg capitalize bg-primary w-full"
+      >
+        <span class="flex justify-center">Watch now</span>
+      </router-link>
     </div>
   </div>
 </template>
@@ -37,6 +33,9 @@ export default {
         return releaseYear
       }
       return ''
+    },
+    getMovieDetail(movie) {
+      return `/movies/${movie.id}`
     }
   }
 }
