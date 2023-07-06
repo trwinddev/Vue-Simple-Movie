@@ -6,6 +6,8 @@
           type="text"
           class="w-full p-4 bg-slate-800 text-white outline-none"
           placeholder="Type here to search..."
+          v-model="searchQuery"
+          @keydown.enter="searchMovies"
         />
       </div>
       <button class="p-4 bg-primary text-white">
@@ -36,21 +38,30 @@
 <script>
 import { ref } from 'vue'
 import MovieCard from '../components/movie/MovieCard.vue'
-import { fetchNowPlayingMovies } from '../config/api'
+import { fetchNowPlayingMovies, searchMovie } from '../config/api'
 
 export default {
   components: { MovieCard },
   setup() {
     const movies = ref([])
+    const searchQuery = ref('')
 
     const fetchMoviesData = async () => {
       movies.value = await fetchNowPlayingMovies()
     }
+    const searchMovies = async () => {
+      if (searchQuery.value.trim() !== '') {
+        movies.value = await searchMovie(searchQuery.value)
+      } else {
+        fetchMoviesData()
+      }
+    }
 
     fetchMoviesData()
-
     return {
-      movies
+      movies,
+      searchQuery,
+      searchMovies
     }
   }
 }

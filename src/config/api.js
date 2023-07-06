@@ -96,3 +96,16 @@ export const fetchMovieSimilar = async (movieId) => {
     return null
   }
 }
+
+export const searchMovie = async (query) => {
+  try {
+    const encodedQuery = encodeURIComponent(query)
+    const apiUrl = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodedQuery}`
+    const response = await fetch(apiUrl)
+    const data = await response.json()
+    return data.results
+  } catch (error) {
+    console.log(error)
+    return []
+  }
+}
