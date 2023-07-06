@@ -27,7 +27,7 @@
         </svg>
       </button>
     </div>
-    <div class="movie-list grid grid-cols-4 gap-10">
+    <div class="movie-list grid grid-cols-4 gap-10 pb-20">
       <div v-for="(movie, index) in movies" :key="index">
         <movie-card :movie="movie"></movie-card>
       </div>
