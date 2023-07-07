@@ -1,5 +1,5 @@
 <template>
-  <div class="pb-10 page-container">
+  <div class="pb-10 page-container" :class="{ dark: isDark }">
     <div class="w-full h-[600px] relative">
       <div class="absolute inset-0 bg-black bg-opacity-70"></div>
       <div
@@ -10,7 +10,7 @@
     <div class="w-full h-[400px] max-w-[800px] mx-auto -mt-[200px] relative z-10 pb-10">
       <img :src="posterImageUrl" class="w-full h-full object-cover rounded-lg" alt="" />
     </div>
-    <h1 class="text-center text-white text-3xl font-bold mb-10">{{ title }}</h1>
+    <h1 class="text-center text-3xl font-bold mb-10">{{ title }}</h1>
     <div class="flex items-center justify-center gap-x-5 mb-10">
       <span
         class="py-2 px-4 border-primary border text-primary rounded-md"
@@ -19,17 +19,13 @@
         >{{ genre.name }}</span
       >
     </div>
-    <p class="text-white text-center leading-relaxed max-w-[600px] mx-auto mb-10">
-      {{ overView }}
-    </p>
+    <p class="text-center leading-relaxed max-w-[600px] mx-auto mb-10">{{ overView }}</p>
     <div class="casts mb-10">
-      <h2 class="text-white text-center text-3xl mb-10">Casts</h2>
+      <h2 class="text-center text-3xl mb-10">Casts</h2>
       <div class="grid grid-cols-4 gap-5">
-        <div class="cast-item text-white" v-for="(cast, index) in casts.slice(0, 8)" :key="index">
+        <div class="cast-item" v-for="(cast, index) in casts.slice(0, 8)" :key="index">
           <img :src="getProfileImageUrl(cast.profile_path)" alt="cast_image" class="w-full" />
-          <h2 class="text-white text-xl font-medium">
-            {{ cast.name }}
-          </h2>
+          <h2 class="text-xl font-medium">{{ cast.name }}</h2>
         </div>
       </div>
     </div>
@@ -51,7 +47,7 @@
       </div>
     </div>
     <div class="similar">
-      <h2 class="text-white capitalize text-3xl mb-10">Similar movie</h2>
+      <h2 class="capitalize text-3xl mb-10">Similar movie</h2>
       <div class="movie-list grid grid-cols-4 gap-10 pb-10">
         <movie-card
           v-for="(movie, index) in similarMovies"
@@ -85,7 +81,8 @@ export default {
       casts: [],
       profilePath: '',
       keyVideos: [],
-      similarMovies: []
+      similarMovies: [],
+      isDark: false
     }
   },
   created() {
@@ -171,6 +168,9 @@ export default {
         return `https://www.youtube.com/embed/${video.key}`
       }
       return ''
+    },
+    toggleDark() {
+      this.isDark = !this.isDark
     },
     scrollToTop() {
       window.scrollTo(0, 0)

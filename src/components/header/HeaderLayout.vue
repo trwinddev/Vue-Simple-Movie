@@ -1,21 +1,33 @@
 <template>
   <div class="page-container">
-    <header class="header text-white flex justify-between items-center py-10 mb-5">
+    <header class="header flex justify-between items-center py-10 mb-5">
       <div class="header-left gap-x-5 flex items-center">
-        <router-link to="/" :class="isActiveLink('home') ? 'text-primary font-bold' : ''">
+        <router-link
+          to="/"
+          :class="[isActiveLink('home') ? 'text-primary font-bold' : '', isDark ? 'dark' : '']"
+        >
           <i class="fa fa-home text-2xl pr-1" aria-hidden="true"></i>
           <span class="text-lg pr-5">Home</span>
         </router-link>
-        <router-link to="/movies" :class="isActiveLink('movies') ? 'text-primary font-bold' : ''">
+        <router-link
+          to="/movies"
+          :class="[isActiveLink('movies') ? 'text-primary font-bold' : '', isDark ? 'dark' : '']"
+        >
           <i class="fa fa-film text-2xl pr-1" aria-hidden="true"></i>
           <span class="text-lg">Movies</span>
         </router-link>
       </div>
       <div class="header-right flex items-center">
+        <i
+          :class="['fa', isDark ? 'fa-sun-o' : 'fa-moon-o', 'cursor-pointer']"
+          aria-hidden="true"
+          @click="toggleDark"
+        ></i>
         <router-link
           v-if="!loggedIn"
           to="/login"
           :class="isActiveLink('login') ? 'text-primary font-bold' : ''"
+          class="ml-8"
         >
           <span class="text-lg">Login</span>
         </router-link>
@@ -55,6 +67,16 @@ import { useRouter } from 'vue-router'
 export default {
   setup() {
     const route = useRoute()
+    const isDark = ref(false)
+
+    const toggleDark = () => {
+      isDark.value = !isDark.value
+      if (isDark.value) {
+        document.body.classList.add('dark')
+      } else {
+        document.body.classList.remove('dark')
+      }
+    }
 
     const isActiveLink = (routeName) => {
       return route.name === routeName
@@ -83,7 +105,9 @@ export default {
       isActiveLink,
       email,
       loggedIn,
-      logout
+      logout,
+      isDark,
+      toggleDark
     }
   }
 }

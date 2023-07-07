@@ -72,8 +72,6 @@ const { errors, handleSubmit, defineInputBinds } = useForm({
   })
 })
 
-// Creates a submission handler
-// It validate all fields and doesn't call your function unless all fields are valid
 const router = useRouter()
 
 const onSubmit = handleSubmit(async (values) => {
