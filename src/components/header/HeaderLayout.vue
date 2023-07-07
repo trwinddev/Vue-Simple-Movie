@@ -1,7 +1,7 @@
 <template>
   <div class="page-container">
     <header class="header text-white flex justify-between items-center py-10 mb-5">
-      <div class="header-left gap-x-5">
+      <div class="header-left gap-x-5 flex items-center">
         <router-link to="/" :class="isActiveLink('home') ? 'text-primary font-bold' : ''">
           <i class="fa fa-home text-2xl pr-1" aria-hidden="true"></i>
           <span class="text-lg pr-5">Home</span>
@@ -11,12 +11,16 @@
           <span class="text-lg">Movies</span>
         </router-link>
       </div>
-      <!-- <router-view></router-view> -->
-      <div class="header-right">
-        <router-link to="/login" :class="isActiveLink('login') ? 'text-primary font-bold' : ''">
+      <div class="header-right flex items-center">
+        <router-link
+          v-if="!loggedIn"
+          to="/login"
+          :class="isActiveLink('login') ? 'text-primary font-bold' : ''"
+        >
           <span class="text-lg">Login</span>
         </router-link>
         <router-link
+          v-if="!loggedIn"
           to="/register"
           :class="
             isActiveLink('register')
@@ -26,14 +30,27 @@
           class="text-lg ml-5 py-2 px-6 border rounded-3xl"
           >Register</router-link
         >
-        <i class="fa fa-user-circle-o text-2xl pl-5" aria-hidden="true"></i>
+        <div v-if="loggedIn" class="flex items-center">
+          <i class="fa fa-user-circle-o text-2xl pl-5" aria-hidden="true"></i>
+          <span class="text-lg pl-1">{{ email }}</span>
+          <button
+            class="text-lg ml-5 py-2 px-6 border-none bg-slate-600 border rounded-3xl"
+            @click="logout"
+          >
+            Logout
+          </button>
+        </div>
       </div>
     </header>
   </div>
 </template>
 
 <script>
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { auth } from '../../config/firebase'
+import { onAuthStateChanged } from 'firebase/auth'
+import { useRouter } from 'vue-router'
 
 export default {
   setup() {
@@ -43,8 +60,30 @@ export default {
       return route.name === routeName
     }
 
+    const email = ref('')
+    const loggedIn = ref(false)
+    const router = useRouter()
+
+    const logout = () => {
+      auth.signOut()
+      router.push('/')
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        email.value = user.email
+        loggedIn.value = true
+      } else {
+        email.value = ''
+        loggedIn.value = false
+      }
+    })
+
     return {
-      isActiveLink
+      isActiveLink,
+      email,
+      loggedIn,
+      logout
     }
   }
 }

@@ -1,11 +1,12 @@
 <template>
   <div class="relative inline-block left-2/4 -translate-x-2/4">
-    <v-form @submit="onSubmit">
+    <form @submit="onSubmit">
       <div class="bg-slate-800 py-8 px-10 rounded-md">
         <h1 class="flex justify-center text-white text-4xl font-medium pb-5">Register</h1>
         <div class="flex flex-col">
           <label class="text-white text-lg pb-2" for="">Email</label>
           <input
+            v-model="email.value"
             v-bind="email"
             type="email"
             class="bg-transparent border focus:border-slate-200 border-slate-600 outline-none text-white py-3 px-3 rounded w-[400px] text-lg"
@@ -16,6 +17,7 @@
         <div class="flex flex-col pt-3">
           <label class="text-white text-lg pb-2" for="">Password</label>
           <input
+            v-model="password.value"
             v-bind="password"
             type="password"
             class="bg-transparent border focus:border-slate-200 border-slate-600 outline-none text-white py-3 px-3 rounded w-[400px] text-lg"
@@ -26,6 +28,7 @@
         <div class="flex flex-col pt-3 pb-10">
           <label class="text-white text-lg pb-2" for="">Confirm password</label>
           <input
+            v-model="confirm_password.value"
             v-bind="confirm_password"
             rules="confirmed:@password"
             type="password"
@@ -44,13 +47,15 @@
           <router-link class="text-primary font-medium" to="/login">Log in</router-link>
         </p>
       </div>
-    </v-form>
+    </form>
   </div>
 </template>
 
 <script setup>
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
+import { auth } from '../config/firebase'
+import { useRouter } from 'vue-router'
 
 const { errors, handleSubmit, defineInputBinds } = useForm({
   validationSchema: yup.object({
@@ -69,8 +74,18 @@ const { errors, handleSubmit, defineInputBinds } = useForm({
 
 // Creates a submission handler
 // It validate all fields and doesn't call your function unless all fields are valid
-const onSubmit = handleSubmit((values) => {
-  alert(JSON.stringify(values, null, 2))
+const router = useRouter()
+
+const onSubmit = handleSubmit(async (values) => {
+  try {
+    const { email, password } = values
+    const userCredential = await auth.createUserWithEmailAndPassword(email, password)
+    const user = userCredential.user
+    console.log('Registration successful:', user)
+    router.push('/')
+  } catch (error) {
+    console.error('Registration failed:', error.message)
+  }
 })
 
 const email = defineInputBinds('email')

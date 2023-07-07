@@ -1,6 +1,6 @@
 <template>
   <div class="relative inline-block left-2/4 -translate-x-2/4">
-    <v-form @submit="onSubmit">
+    <form @submit="onSubmit">
       <div class="bg-slate-800 py-8 px-10 rounded-md">
         <h1 class="flex justify-center text-white text-4xl font-medium pb-5">Login</h1>
         <div class="flex flex-col">
@@ -33,13 +33,15 @@
           >
         </p>
       </div>
-    </v-form>
+    </form>
   </div>
 </template>
 
 <script setup>
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
+import { auth } from '../config/firebase'
+import { useRouter } from 'vue-router'
 
 const { errors, handleSubmit, defineInputBinds } = useForm({
   validationSchema: yup.object({
@@ -53,8 +55,18 @@ const { errors, handleSubmit, defineInputBinds } = useForm({
 
 // Creates a submission handler
 // It validate all fields and doesn't call your function unless all fields are valid
-const onSubmit = handleSubmit((values) => {
-  alert(JSON.stringify(values, null, 2))
+const router = useRouter()
+const onSubmit = handleSubmit(async (values) => {
+  try {
+    const { email, password } = values
+    const userCredential = await auth.signInWithEmailAndPassword(email, password)
+    const user = userCredential.user
+    console.log('Login successful:', user)
+
+    router.push('/')
+  } catch (error) {
+    console.error('Login failed:', error.message)
+  }
 })
 
 const email = defineInputBinds('email')

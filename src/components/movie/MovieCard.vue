@@ -8,7 +8,15 @@
         <span>{{ movie.vote_average }}⭐</span>
       </div>
       <router-link
+        v-if="loggedIn"
         :to="getMovieDetail(movie)"
+        class="mt-auto py-3 px-6 rounded-lg capitalize bg-primary w-full"
+      >
+        <span class="flex justify-center">Watch now</span>
+      </router-link>
+      <router-link
+        v-else
+        to="/login"
         class="mt-auto py-3 px-6 rounded-lg capitalize bg-primary w-full"
       >
         <span class="flex justify-center">Watch now</span>
@@ -18,8 +26,41 @@
 </template>
 
 <script>
+import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { auth } from '../../config/firebase'
+import { onAuthStateChanged } from 'firebase/auth'
+
 export default {
   props: ['movie'],
+  setup() {
+    const route = useRoute()
+    const router = useRouter()
+
+    const isActiveLink = (routeName) => {
+      return route.name === routeName
+    }
+
+    const loggedIn = ref(false)
+
+    onAuthStateChanged(auth, (user) => {
+      loggedIn.value = !!user
+    })
+
+    const getMovieDetail = (movie) => {
+      if (loggedIn.value) {
+        return `/movies/${movie.id}`
+      } else {
+        router.push('/login')
+      }
+    }
+
+    return {
+      isActiveLink,
+      loggedIn,
+      getMovieDetail
+    }
+  },
   methods: {
     getMoviePosterUrl() {
       if (this.movie.poster_path) {
@@ -33,9 +74,6 @@ export default {
         return releaseYear
       }
       return ''
-    },
-    getMovieDetail(movie) {
-      return `/movies/${movie.id}`
     }
   }
 }
