@@ -11,7 +11,10 @@
         <span class="py-2 px-4 border border-white rounded-md">Comedy</span>
         <span class="py-2 px-4 border border-white rounded-md">Fantasy</span>
       </div>
-      <button class="py-3 px-6 rounded-lg bg-primary text-white font-medium">Watch now</button>
+
+      <router-link :to="`/movies/${movie.id}`">
+        <button class="py-3 px-6 rounded-lg bg-primary text-white font-medium">Watch now</button>
+      </router-link>
     </div>
   </div>
 </template>
